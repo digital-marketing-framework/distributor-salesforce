@@ -27,6 +27,9 @@ class SalesforceRoute extends RequestRoute
     {
         return [
             'oid' => DataProcessor::valueSchemaDefaultValueConstant(''),
+            'retURL' => DataProcessor::valueSchemaDefaultValueConstant('#'),
+            'encoding' => DataProcessor::valueSchemaDefaultValueConstant('UTF-8'),
+
             'debug' => DataProcessor::valueSchemaDefaultValueNull(),
             'debugEmail' => DataProcessor::valueSchemaDefaultValueNull(),
 
