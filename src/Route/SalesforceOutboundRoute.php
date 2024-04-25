@@ -68,11 +68,14 @@ class SalesforceOutboundRoute extends RequestOutboundRoute
         $urlSchema->getSuggestedValues()->addValue('https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8');
 
         $oidSchema = new StringSchema(static::DEFAULT_OID);
+        $oidSchema->getRenderingDefinition()->setLabel('OID');
         $oidSchema->setRequired();
-        $schema->addProperty(static::KEY_OID, $oidSchema);
+        $property = $schema->addProperty(static::KEY_OID, $oidSchema);
+        $property->setWeight(60);
 
         $debugSchema = new StringSchema(static::DEFAULT_DEBUG_EMAIL);
-        $schema->addProperty(static::KEY_DEBUG_EMAIL, $debugSchema);
+        $property = $schema->addProperty(static::KEY_DEBUG_EMAIL, $debugSchema);
+        $property->setWeight(60);
 
         return $schema;
     }
