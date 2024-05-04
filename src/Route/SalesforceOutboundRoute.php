@@ -47,10 +47,17 @@ class SalesforceOutboundRoute extends RequestOutboundRoute
         return $data;
     }
 
+    protected function getMethod(): string
+    {
+        return 'POST';
+    }
+
     public static function getSchema(): SchemaInterface
     {
         /** @var ContainerSchema $schema */
         $schema = parent::getSchema();
+
+        $schema->removeProperty(static::KEY_METHOD);
 
         /** @var StringSchema $urlSchema */
         $urlSchema = $schema->getProperty(static::KEY_URL)->getSchema();
