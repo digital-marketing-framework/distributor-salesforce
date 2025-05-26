@@ -25,12 +25,11 @@
     "homepage": "https://www.mediatis.de",
     "require": {
         "php": "^8.2",
-        "digital-marketing-framework/distributor-request": "dev-feature/MFR-136-t3-13"
+        "digital-marketing-framework/distributor-request": "^3.0"
     },
     "require-dev": {
         "mediatis/coding-standards": "^2.0"
     },
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "DigitalMarketingFramework\\Distributor\\Salesforce\\": "src/"
