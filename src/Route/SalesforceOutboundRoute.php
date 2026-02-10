@@ -52,17 +52,22 @@ class SalesforceOutboundRoute extends RequestOutboundRoute
         return 'POST';
     }
 
+    protected static function getUrlSchema(): ?SchemaInterface
+    {
+        $urlSchema = new StringSchema();
+        $urlSchema->setDefaultValue('https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8');
+        $urlSchema->getSuggestedValues()->addValue('https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8');
+        $urlSchema->getSuggestedValues()->addValue('https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8');
+
+        return $urlSchema;
+    }
+
     public static function getSchema(): SchemaInterface
     {
         /** @var ContainerSchema $schema */
         $schema = parent::getSchema();
 
         $schema->removeProperty(static::KEY_METHOD);
-
-        /** @var StringSchema $urlSchema */
-        $urlSchema = $schema->getProperty(static::KEY_URL)->getSchema();
-        $urlSchema->getSuggestedValues()->addValue('https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8');
-        $urlSchema->getSuggestedValues()->addValue('https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8');
 
         $oidSchema = new StringSchema(static::DEFAULT_OID);
         $oidSchema->getRenderingDefinition()->setLabel('OID');
