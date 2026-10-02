@@ -5,6 +5,7 @@ namespace DigitalMarketingFramework\Distributor\Salesforce;
 use DigitalMarketingFramework\Core\Initialization;
 use DigitalMarketingFramework\Core\Registry\RegistryDomain;
 use DigitalMarketingFramework\Distributor\Core\Route\OutboundRouteInterface;
+use DigitalMarketingFramework\Distributor\Salesforce\ConfigurationDocument\Migration\DynamicOidMigration;
 use DigitalMarketingFramework\Distributor\Salesforce\Route\SalesforceOutboundRoute;
 
 class DistributorSalesforceInitialization extends Initialization
@@ -17,10 +18,12 @@ class DistributorSalesforceInitialization extends Initialization
         ],
     ];
 
-    protected const SCHEMA_MIGRATIONS = [];
+    protected const SCHEMA_MIGRATIONS = [
+        DynamicOidMigration::class,
+    ];
 
     public function __construct(string $packageAlias = '')
     {
-        parent::__construct('distributor-salesforce', '1.0.0', $packageAlias);
+        parent::__construct('distributor-salesforce', '1.0.1', $packageAlias);
     }
 }
