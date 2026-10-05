@@ -2,10 +2,13 @@
 
 namespace DigitalMarketingFramework\Distributor\Salesforce\Route;
 
+use DigitalMarketingFramework\Core\DataProcessor\ValueSource\ConstantValueSource;
 use DigitalMarketingFramework\Core\Integration\IntegrationInfo;
 use DigitalMarketingFramework\Core\Model\Data\DataInterface;
 use DigitalMarketingFramework\Core\SchemaDocument\FieldDefinition\FieldDefinition;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\ContainerSchema;
+use DigitalMarketingFramework\Core\SchemaDocument\Schema\Custom\ValueSchema;
+use DigitalMarketingFramework\Core\SchemaDocument\Schema\CustomSchema;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\SchemaInterface;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\StringSchema;
 use DigitalMarketingFramework\Distributor\Request\Route\RequestOutboundRoute;
@@ -34,7 +37,7 @@ class SalesforceOutboundRoute extends RequestOutboundRoute
     {
         $data = parent::buildData();
 
-        $data['oid'] = $this->getConfig(static::KEY_OID);
+        $data['oid'] = $this->getOid();
         $data['encoding'] = 'UTF-8';
         $data['retURL'] = '#';
 
@@ -45,6 +48,19 @@ class SalesforceOutboundRoute extends RequestOutboundRoute
         }
 
         return $data;
+    }
+
+    /**
+     * Documents that have not been migrated yet still hold the OID as a plain string.
+     */
+    protected function getOid(): string
+    {
+        $oid = $this->getConfig(static::KEY_OID);
+        if (!is_string($oid)) {
+            $oid = $this->dataProcessor->processValue($oid, $this->getDataProcessorContext());
+        }
+
+        return (string)$oid;
     }
 
     protected function getMethod(): string
@@ -69,9 +85,8 @@ class SalesforceOutboundRoute extends RequestOutboundRoute
 
         $schema->removeProperty(static::KEY_METHOD);
 
-        $oidSchema = new StringSchema(static::DEFAULT_OID);
+        $oidSchema = new CustomSchema(ValueSchema::TYPE, ValueSchema::createStandardValueConfiguration('constant', [ConstantValueSource::KEY_VALUE => static::DEFAULT_OID]));
         $oidSchema->getRenderingDefinition()->setLabel('OID');
-        $oidSchema->setRequired();
         $property = $schema->addProperty(static::KEY_OID, $oidSchema);
         $property->setWeight(60);
 
